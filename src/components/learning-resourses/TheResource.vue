@@ -1,6 +1,8 @@
 <template>
   <base-card>
-    <base-button :mode="storedResSelected" @click="setSelectedTab('stored-resourses')"
+    <base-button
+      :mode="storedResSelected"
+      @click="setSelectedTab('stored-resourses')"
       >Stored resources</base-button
     >
     <base-button :mode="addResSelected" @click="setSelectedTab('add-resource')"
@@ -8,7 +10,9 @@
     >
   </base-card>
 
-  <component :is="selectedTab"></component>
+  <keep-alive>
+    <component :is="selectedTab"></component>
+  </keep-alive>
 </template>
 
 <script>
@@ -38,22 +42,34 @@ export default {
       ],
     };
   },
-  provide(){
-      return {
-          resources: this.storedResources,
-      }
+  provide() {
+    return {
+      resources: this.storedResources,
+      addResource: this.addResource,
+    };
   },
-  computed:{
-    storedResSelected(){
-      return this.selectedTab !== 'stored-resourses'? 'flat':null;
+  computed: {
+    storedResSelected() {
+      return this.selectedTab !== "stored-resourses" ? "flat" : null;
     },
-    addResSelected(){
-      return this.selectedTab !== 'add-resource'? 'flat':null;
-    }
+    addResSelected() {
+      return this.selectedTab !== "add-resource" ? "flat" : null;
+    },
   },
   methods: {
     setSelectedTab(tab) {
       this.selectedTab = tab;
+    },
+    addResource(title, description, url) {
+      const newResource = {
+        id: new Date().toISOString(),
+        title: title,
+        description: description,
+        link: url,
+      };
+
+      this.storedResources.unshift(newResource);
+      this.selectedTab = "stored-resourses";
     },
   },
 };
