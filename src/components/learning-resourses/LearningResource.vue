@@ -24,6 +24,9 @@ export default {
   data() {
     return {};
   },
+  removeResource(id){
+    this.removeResource(id);
+  }
 };
 </script>
 
