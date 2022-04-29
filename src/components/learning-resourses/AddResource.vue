@@ -33,6 +33,10 @@ export default {
     },
     methods: {
         submitData(){
+
+            if(this.titleInput.trim() === '' || this.descInput.trim() === '' || this.linkInput.trim() === ''){
+                return 
+            }
             this.addResource(this.titleInput, this.descInput, this.linkInput);
         }
     }
