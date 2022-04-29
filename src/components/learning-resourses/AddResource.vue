@@ -1,46 +1,70 @@
 <template>
-    <base-card>
-    <form @submit.prevent="submitData">
-        <div class="form-control">
-            <label for="title">Title</label>
-            <input type="text" name="title" id="title" v-model="titleInput">
-        </div>
-        <div class="form-control">
-            <label for="description">Description</label>
-            <textarea name="description" id="description" rows="3" v-model="descInput"></textarea>
-        </div>
-        <div class="form-control">
-            <label for="link">Title</label>
-            <input type="url" name="link" id="link" v-model="linkInput">
-        </div>
+  <base-dialog v-if="inputIsInvalid" title="Invalid Input">
+    <template #default>
+      <p>One or more inputs is/are invalid, Make sure all inputs are filled</p>
+    </template>
 
-        <div>
-            <base-button type="submit" @click.prevent="submitData">Add Resource</base-button>
-        </div>
+    <template #actions>
+      <base-button @click="confirmError">Got it</base-button>
+    </template>
+  </base-dialog>
+  <base-card>
+    <form @submit.prevent="submitData">
+      <div class="form-control">
+        <label for="title">Title</label>
+        <input type="text" name="title" id="title" v-model="titleInput" />
+      </div>
+      <div class="form-control">
+        <label for="description">Description</label>
+        <textarea
+          name="description"
+          id="description"
+          rows="3"
+          v-model="descInput"
+        ></textarea>
+      </div>
+      <div class="form-control">
+        <label for="link">Title</label>
+        <input type="url" name="link" id="link" v-model="linkInput" />
+      </div>
+
+      <div>
+        <base-button type="submit" @click.prevent="submitData"
+          >Add Resource</base-button
+        >
+      </div>
     </form>
-    </base-card>
+  </base-card>
 </template>
 
 <script>
 export default {
-    inject: ['addResource'],
-    data(){
-        return {
-            titleInput:'',
-            descInput:'',
-            linkInput:'',
-        }
+  inject: ["addResource"],
+  data() {
+    return {
+      titleInput: "",
+      descInput: "",
+      linkInput: "",
+      inputIsInvalid: false,
+    };
+  },
+  methods: {
+    submitData() {
+      if (
+        this.titleInput.trim() === "" ||
+        this.descInput.trim() === "" ||
+        this.linkInput.trim() === ""
+      ) {
+        this.inputIsInvalid = true;
+        return;
+      }
+      this.addResource(this.titleInput, this.descInput, this.linkInput);
     },
-    methods: {
-        submitData(){
-
-            if(this.titleInput.trim() === '' || this.descInput.trim() === '' || this.linkInput.trim() === ''){
-                return 
-            }
-            this.addResource(this.titleInput, this.descInput, this.linkInput);
-        }
+    confirmError() {
+        this.inputIsInvalid = false;
     }
-}
+  },
+};
 </script>
 
 <style scoped>
